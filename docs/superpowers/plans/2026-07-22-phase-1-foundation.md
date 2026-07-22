@@ -679,7 +679,12 @@ git commit -m "feat: add contrast-verified design tokens and global stylesheet"
 
 ## Task 3: Project content schema and the first project
 
-**Prerequisite — this task blocks on one file from Aaryan:** a hero render exported from Onshape at `src/assets/projects/intake-wedges/hero.webp`, at least 1600px wide. Nothing else in this task can be verified without it. Export an isometric view on a transparent or dark background.
+**Split into 3a and 3b during execution.** The schema and collection wiring (3a) have no content dependency and are done first. Only the content file itself (3b) needs a render, because Astro fails the build when frontmatter references a missing asset.
+
+- **Task 3a — steps 1 to 5:** `projectSchema.ts`, its tests, and `content.config.ts`. No content file, no images. The collection resolves to an empty array, which every consuming page handles.
+- **Task 3b — steps 6 to 9:** the hero render at `src/assets/projects/intake-wedges/hero.webp` (isometric, ≥1600px wide, dark or transparent background) and `intake-wedges.mdx`. Deferred until Aaryan has renders exported.
+
+Task 6 (dimension callouts) also defers with 3b — a callout needs a hero image to point at. Tasks 4, 5 and 7 run in between, so the site deploys and is live before any content exists.
 
 **Files:**
 - Create: `src/lib/projectSchema.ts`, `src/content.config.ts`, `src/content/projects/intake-wedges.mdx`
