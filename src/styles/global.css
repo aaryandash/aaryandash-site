@@ -5,7 +5,7 @@
 :root {
   --color-canvas: #0b0d0f;
   --color-surface: #12161a;
-  --color-line: #2a3238;
+  --color-line: #2f383f;
   --color-line-bright: #55636d;
   --color-text: #e6edf3;
   --color-text-muted: #9aa7b2;
@@ -26,8 +26,18 @@
   --stroke-thin: 1px;
   --stroke-medium: 2px;
 
-  --grid-size: 24px;
+  --grid-size: 32px;
+  /* Grid lines need a full device pixel to survive antialiasing. On
+     high-density displays half a CSS pixel is still a whole device pixel,
+     so the line can go finer there without disappearing. */
+  --grid-line: 1px;
   --measure: 68ch;
+}
+
+@media (min-resolution: 2dppx) {
+  :root {
+    --grid-line: 0.5px;
+  }
 }
 
 *,
@@ -41,8 +51,8 @@ body {
   background-color: var(--color-canvas);
   /* Graph-paper substrate. Two gradients, no image request. */
   background-image:
-    linear-gradient(to right, var(--color-line) var(--stroke-hair), transparent var(--stroke-hair)),
-    linear-gradient(to bottom, var(--color-line) var(--stroke-hair), transparent var(--stroke-hair));
+    linear-gradient(to right, var(--color-line) var(--grid-line), transparent var(--grid-line)),
+    linear-gradient(to bottom, var(--color-line) var(--grid-line), transparent var(--grid-line));
   background-size: var(--grid-size) var(--grid-size);
   color: var(--color-text);
   font-family: var(--font-sans);

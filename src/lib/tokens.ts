@@ -9,8 +9,12 @@ export const color = {
   canvas: '#0B0D0F',
   /** Raised surfaces: spec tables, cards. */
   surface: '#12161A',
-  /** Decorative graph-paper grid. Deliberately near-invisible. */
-  line: '#2A3238',
+  /**
+   * Decorative graph-paper grid. Quiet, but it must actually render — at
+   * devicePixelRatio 1 a sub-pixel line of a near-canvas colour antialiases
+   * away to nothing. 1.63:1 against the canvas: visible, still substrate.
+   */
+  line: '#2F383F',
   /** Meaningful borders and dividers. Clears 3:1. */
   lineBright: '#55636D',
   /** Primary body text. */
