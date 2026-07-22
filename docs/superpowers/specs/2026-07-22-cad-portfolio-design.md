@@ -40,7 +40,7 @@ Each page is a "sheet." The title block displays `SHEET n OF m` and acts as the 
 | 01 · Parts Bin | `/projects` | All projects as draggable part cards + build plate |
 | 02 · Project sheet | `/projects/[slug]` | One per project |
 | 03 · About | `/about` | Résumé as a drawing sheet, tool inventory, PDF download |
-| 04 · Scrap Bin | `/scrap-bin` | Personal content, deliberately off-system |
+| 04 · Personal Interests | `/interests` | Personal content, deliberately off-system |
 
 Contact lives permanently in the title block footer: email, GitHub, LinkedIn. Values are set in site config, not hard-coded into templates.
 
@@ -112,16 +112,20 @@ Every animation corresponds to a mechanical event. Nothing moves as decoration.
 
 All motion is gated behind `prefers-reduced-motion`, interruptible, and never blocks access to content. No animation delays first meaningful paint.
 
-## Scrap Bin
+## Personal Interests
 
-The personal section deliberately breaks the drawing-set system. Crossing into it should feel like flipping the drawing over and finding doodles on the back — the rupture is the point, and it only works because the rest of the site is disciplined.
+The nav label is plain and literal — "Personal Interests" — deliberately. Navigation exists to tell visitors where they are going, and a clever label taxes every reader, including the admissions audience skimming quickly. Wit belongs inside the page, not on the signpost.
+
+Within the page, the header carries a small drawing-annotation stamp reading `NOT TO SCALE` — a real notation meaning a view is not dimensioned. Annotation-sized, secondary to the plain header, and safe to remove without affecting anything else.
+
+The section deliberately breaks the drawing-set system. Crossing into it should feel like flipping the drawing over and finding doodles on the back — the rupture is the point, and it only works because the rest of the site is disciplined.
 
 - **Manga** — Vagabond, Berserk, Hunter × Hunter, The Climber — ink and brush treatment, panel-gutter layout
 - **Anime** — Evangelion, Naruto, Hunter × Hunter — presented as personal commentary, not fan art
 - **Games** — Stardew Valley, Terraria — pixel UI, sprite hover states
 - **Music** — a curated list of artists and tracks, hand-edited through the CMS
 
-All Scrap Bin content is CMS-managed as simple ordered lists with an optional note per entry. No third-party API integration in the initial build; a Spotify integration may be considered later but is out of scope here, since a live API dependency violates constraint 4.
+All Personal Interests content is CMS-managed as simple ordered lists with an optional note per entry. No third-party API integration in the initial build; a Spotify integration may be considered later but is out of scope here, since a live API dependency violates constraint 4.
 
 ## Technical stack
 
@@ -180,7 +184,7 @@ Each phase ends deployed and working.
 1. **Foundation** — Astro skeleton, design system, title block nav, one project sheet end-to-end, GitHub Actions deploy. Ends with a live URL that can be sent to someone.
 2. **Parts bin** — build plate interaction, section scrubber, remaining projects.
 3. **Editing** — Sveltia CMS, OAuth worker, edit-mode overlay.
-4. **Scrap Bin** — personal section.
+4. **Personal Interests** — personal section.
 5. **Polish** — performance pass, accessibility audit, SEO and metadata, light theme.
 
 ## Owner responsibilities outside the build
