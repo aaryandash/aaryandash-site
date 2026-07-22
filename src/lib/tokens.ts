@@ -1,0 +1,47 @@
+/**
+ * Design tokens — the single source of truth for the drawing-set system.
+ * CSS custom properties in global.css are generated from these names by hand;
+ * keep them in sync.
+ */
+
+export const color = {
+  /** Page background — near-black, not pure black. */
+  canvas: '#0B0D0F',
+  /** Raised surfaces: spec tables, cards. */
+  surface: '#12161A',
+  /** Decorative graph-paper grid. Deliberately near-invisible. */
+  line: '#2A3238',
+  /** Meaningful borders and dividers. Clears 3:1. */
+  lineBright: '#55636D',
+  /** Primary body text. */
+  text: '#E6EDF3',
+  /** Secondary text, annotations, captions. */
+  textMuted: '#9AA7B2',
+  /** Active or critical annotation. One per viewport, maximum. */
+  accent: '#FF6B1A',
+  /** Unresolved and inactive states — the underdefined-sketch blue. */
+  underdefined: '#4C8DFF',
+} as const;
+
+/** Named `font`, not `type` — `type` collides with TypeScript's
+    `import { type X }` syntax and produces confusing parse errors. */
+export const font = {
+  mono: "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
+  sans: "'IBM Plex Sans Variable', 'IBM Plex Sans', system-ui, sans-serif",
+} as const;
+
+export const space = {
+  xs: '0.25rem',
+  sm: '0.5rem',
+  md: '1rem',
+  lg: '2rem',
+  xl: '4rem',
+  xxl: '8rem',
+} as const;
+
+/** Hairline widths. The drawing look depends on these staying genuinely thin. */
+export const stroke = {
+  hair: '0.5px',
+  thin: '1px',
+  medium: '2px',
+} as const;

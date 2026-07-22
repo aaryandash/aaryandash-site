@@ -1,0 +1,107 @@
+@import '@fontsource-variable/ibm-plex-sans';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+:root {
+  --color-canvas: #0b0d0f;
+  --color-surface: #12161a;
+  --color-line: #2a3238;
+  --color-line-bright: #55636d;
+  --color-text: #e6edf3;
+  --color-text-muted: #9aa7b2;
+  --color-accent: #ff6b1a;
+  --color-underdefined: #4c8dff;
+
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'IBM Plex Sans Variable', 'IBM Plex Sans', system-ui, sans-serif;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+  --space-xxl: 8rem;
+
+  --stroke-hair: 0.5px;
+  --stroke-thin: 1px;
+  --stroke-medium: 2px;
+
+  --grid-size: 24px;
+  --measure: 68ch;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-canvas);
+  /* Graph-paper substrate. Two gradients, no image request. */
+  background-image:
+    linear-gradient(to right, var(--color-line) var(--stroke-hair), transparent var(--stroke-hair)),
+    linear-gradient(to bottom, var(--color-line) var(--stroke-hair), transparent var(--stroke-hair));
+  background-size: var(--grid-size) var(--grid-size);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* Annotation type: labels, dimensions, spec values, title block. */
+.annotation {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+a {
+  color: var(--color-text);
+  text-decoration-color: var(--color-line-bright);
+  text-underline-offset: 0.25em;
+}
+
+a:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: var(--stroke-medium) solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
