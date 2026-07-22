@@ -1,0 +1,42 @@
+---
+/**
+ * Shown when the projects collection is empty. Styled as a drawing note
+ * rather than an error state — an empty bin should read as "not yet issued",
+ * not as a broken page. Disappears automatically once a project exists.
+ */
+interface Props {
+  note?: string;
+}
+
+const { note = 'No parts released to this sheet yet.' } = Astro.props;
+---
+
+<div class="empty-bin">
+  <p class="empty-bin__stamp annotation">Not issued</p>
+  <p class="empty-bin__note">{note}</p>
+</div>
+
+<style>
+  .empty-bin {
+    display: grid;
+    gap: var(--space-sm);
+    place-items: center;
+    padding: var(--space-xl) var(--space-lg);
+    border: var(--stroke-thin) dashed var(--color-line-bright);
+    background-color: var(--color-surface);
+    text-align: center;
+  }
+
+  .empty-bin__stamp {
+    padding: var(--space-xs) var(--space-sm);
+    border: var(--stroke-thin) solid var(--color-text-muted);
+    letter-spacing: 0.16em;
+  }
+
+  .empty-bin__note {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+</style>

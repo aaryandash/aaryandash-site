@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { href } from '../lib/paths';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+---
+
+<li class="part-card">
+  <a href={href(`/projects/${project.id}`)}>
+    <Image src={data.heroRender} alt={data.heroAlt} widths={[400, 800]} loading="lazy" />
+    <span class="part-card__season annotation">{data.season}</span>
+    <span class="part-card__title">{data.title}</span>
+    <span class="part-card__summary">{data.summary}</span>
+  </a>
+</li>
+
+<style>
+  .part-card a {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    border: var(--stroke-thin) solid var(--color-line-bright);
+    background-color: var(--color-surface);
+    text-decoration: none;
+    height: 100%;
+  }
+
+  .part-card a:hover {
+    border-color: var(--color-accent);
+  }
+
+  .part-card img {
+    display: block;
+    width: 100%;
+    margin-block-end: var(--space-sm);
+  }
+
+  .part-card__title {
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    color: var(--color-text);
+  }
+
+  .part-card__summary {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+  }
+</style>

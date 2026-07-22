@@ -1,11 +1,82 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PartCard from '../components/PartCard.astro';
+import EmptyBin from '../components/EmptyBin.astro';
+import { href } from '../lib/paths';
+import { SITE_NAME } from '../lib/meta';
+
+const all = await getCollection('projects');
+const featured = all
+  .filter((project) => project.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+/** Never show an empty home page: fall back to everything if nothing is flagged. */
+const shown = featured.length > 0
+  ? featured
+  : [...all].sort((a, b) => a.data.order - b.data.order);
 ---
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>aaryandash-site</title>
-  </head>
-  <body>
-    <h1>Scaffold online</h1>
-  </body>
-</html>
+
+<BaseLayout path="/">
+  <section class="hero">
+    <p class="annotation">Mechanical engineering · Portfolio</p>
+    <h1>{SITE_NAME}</h1>
+    <p class="hero__lede prose">
+      I design mechanisms — FRC robot subsystems, competition CAD, and parts that
+      have to survive contact with reality.
+    </p>
+  </section>
+
+  <section aria-labelledby="featured-heading" class="featured">
+    <h2 id="featured-heading" class="annotation">Selected work</h2>
+
+    {shown.length > 0 ? (
+      <>
+        <ul class="featured__list">
+          {shown.map((project) => <PartCard project={project} />)}
+        </ul>
+        <p class="featured__more">
+          <a href={href('/projects')}>All projects →</a>
+        </p>
+      </>
+    ) : (
+      <EmptyBin note="Projects are being drawn up. Check back shortly." />
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-xl);
+    border-block-end: var(--stroke-thin) solid var(--color-line-bright);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    margin-block: var(--space-sm) var(--space-md);
+    letter-spacing: 0.04em;
+  }
+
+  .hero__lede {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+  }
+
+  .featured {
+    padding-block: var(--space-xl);
+  }
+
+  .featured__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-lg);
+    list-style: none;
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+  }
+
+  .featured__more {
+    margin-block-start: var(--space-lg);
+    font-family: var(--font-mono);
+  }
+</style>

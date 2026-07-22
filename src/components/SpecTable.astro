@@ -1,0 +1,57 @@
+---
+interface Props {
+  specs: { label: string; value: string }[];
+}
+
+const { specs } = Astro.props;
+---
+
+{specs.length > 0 && (
+  <table class="spec-table">
+    <caption class="annotation">Specification</caption>
+    <tbody>
+      {specs.map((spec) => (
+        <tr>
+          <th scope="row">{spec.label}</th>
+          <td>{spec.value}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+
+<style>
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    background-color: var(--color-surface);
+    border: var(--stroke-thin) solid var(--color-line-bright);
+  }
+
+  .spec-table caption {
+    text-align: start;
+    padding-block-end: var(--space-sm);
+  }
+
+  .spec-table th,
+  .spec-table td {
+    padding: var(--space-sm) var(--space-md);
+    border-block-end: var(--stroke-hair) solid var(--color-line-bright);
+    text-align: start;
+  }
+
+  .spec-table tr:last-child th,
+  .spec-table tr:last-child td {
+    border-block-end: none;
+  }
+
+  .spec-table th {
+    color: var(--color-text-muted);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    width: 40%;
+  }
+</style>

@@ -1,0 +1,128 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import Gallery from '../../components/Gallery.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { data } = project;
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  path={`/projects/${project.id}`}
+>
+  <article>
+    <header class="sheet-header">
+      <p class="annotation">{data.season} · {data.role}</p>
+      <h1>{data.title}</h1>
+      <p class="sheet-header__summary prose">{data.summary}</p>
+    </header>
+
+    <div class="sheet-hero-frame">
+      <Image
+        class="sheet-hero"
+        src={data.heroRender}
+        alt={data.heroAlt}
+        widths={[800, 1200, 1600]}
+        loading="eager"
+      />
+    </div>
+
+    <div class="sheet-body">
+      <aside class="sheet-meta">
+        <SpecTable specs={data.specs} />
+
+        <dl class="annotation sheet-meta__lists">
+          <dt>Tools</dt>
+          <dd>{data.tools.join(', ')}</dd>
+          {data.materials.length > 0 && (
+            <>
+              <dt>Materials</dt>
+              <dd>{data.materials.join(', ')}</dd>
+            </>
+          )}
+        </dl>
+      </aside>
+
+      <div class="prose sheet-writeup">
+        <Content />
+      </div>
+    </div>
+
+    <Gallery items={data.gallery} />
+  </article>
+</BaseLayout>
+
+<style>
+  .sheet-header {
+    padding-block: var(--space-lg);
+  }
+
+  .sheet-header h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-block: var(--space-sm);
+  }
+
+  .sheet-header__summary {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+  }
+
+  .sheet-hero-frame {
+    position: relative;
+  }
+
+  .sheet-hero {
+    display: block;
+    width: 100%;
+    border: var(--stroke-thin) solid var(--color-line-bright);
+  }
+
+  .sheet-body {
+    display: grid;
+    grid-template-columns: minmax(16rem, 22rem) 1fr;
+    gap: var(--space-xl);
+    padding-block: var(--space-xl);
+    align-items: start;
+  }
+
+  .sheet-meta__lists {
+    margin-block-start: var(--space-lg);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-xs) var(--space-md);
+  }
+
+  .sheet-meta__lists dt {
+    color: var(--color-line-bright);
+  }
+
+  .sheet-meta__lists dd {
+    margin: 0;
+  }
+
+  .sheet-writeup :global(h2) {
+    font-size: 1.25rem;
+    margin-block-start: var(--space-lg);
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 52rem) {
+    .sheet-body {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+  }
+</style>

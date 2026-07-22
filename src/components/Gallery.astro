@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  items: { src: ImageMetadata; alt: string; caption: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <ul class="gallery">
+    {items.map((item) => (
+      <li>
+        <figure>
+          <Image src={item.src} alt={item.alt} widths={[400, 800, 1200]} loading="lazy" />
+          {item.caption && <figcaption class="annotation">{item.caption}</figcaption>}
+        </figure>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure img {
+    display: block;
+    width: 100%;
+    border: var(--stroke-thin) solid var(--color-line-bright);
+  }
+
+  figcaption {
+    margin-block-start: var(--space-sm);
+  }
+</style>
