@@ -21,6 +21,12 @@ export const color = {
   text: '#E6EDF3',
   /** Secondary text, annotations, captions. */
   textMuted: '#9AA7B2',
+  /**
+   * The dimmest colour still legal for text — sheet numbers, de-emphasised
+   * annotation. Do NOT reach for `lineBright` here: it is verified for
+   * borders at 3:1 and fails the 4.5:1 text threshold.
+   */
+  textDim: '#778590',
   /** Active or critical annotation. One per viewport, maximum. */
   accent: '#FF6B1A',
   /** Unresolved and inactive states — the underdefined-sketch blue. */

@@ -9,6 +9,9 @@
   --color-line-bright: #55636d;
   --color-text: #e6edf3;
   --color-text-muted: #9aa7b2;
+  /* Dimmest legal text colour. Not --color-line-bright: that is a border
+     colour at 3:1 and fails the 4.5:1 text threshold. */
+  --color-text-dim: #778590;
   --color-accent: #ff6b1a;
   --color-underdefined: #4c8dff;
 

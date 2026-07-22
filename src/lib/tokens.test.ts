@@ -22,6 +22,21 @@ describe('colour tokens meet WCAG AA on the dark canvas', () => {
   it('meaningful borders clear the 3:1 non-text threshold', () => {
     expect(contrastRatio(color.lineBright, color.canvas)).toBeGreaterThanOrEqual(3);
   });
+
+  it('the dimmest text colour still clears 4.5:1', () => {
+    expect(contrastRatio(color.textDim, color.canvas)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it('lineBright is a border colour and must never be used as text', () => {
+    // Documents intent: it legitimately fails the text threshold, which is
+    // why textDim exists. Regression guard for a real Lighthouse failure.
+    expect(contrastRatio(color.lineBright, color.canvas)).toBeLessThan(4.5);
+  });
+
+  it('textDim is dimmer than textMuted, or the distinction is pointless', () => {
+    expect(contrastRatio(color.textDim, color.canvas))
+      .toBeLessThan(contrastRatio(color.textMuted, color.canvas));
+  });
 });
 
 describe('the decorative grid stays quiet', () => {
