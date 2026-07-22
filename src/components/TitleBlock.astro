@@ -1,0 +1,102 @@
+---
+import { SHEETS, builtSheets, sheetLabel, activeSheet } from '../lib/sheets';
+import { href } from '../lib/paths';
+import { SITE_NAME } from '../lib/meta';
+
+interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+const current = activeSheet(path);
+const sheets = builtSheets();
+---
+
+<nav class="title-block" aria-label="Site sections">
+  <a class="title-block__name" href={href('/')}>{SITE_NAME}</a>
+
+  <ul class="title-block__sheets">
+    {sheets.map((sheet) => (
+      <li>
+        <a
+          href={href(sheet.path)}
+          aria-current={current?.n === sheet.n ? 'page' : undefined}
+        >
+          <span class="title-block__num">{String(sheet.n).padStart(2, '0')}</span>
+          <span class="title-block__label">{sheet.label}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="title-block__sheet-ref annotation">
+    {current ? sheetLabel(current.n, SHEETS.length) : ''}
+  </p>
+</nav>
+
+<style>
+  .title-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: var(--stroke-thin) solid var(--color-line-bright);
+    background-color: var(--color-canvas);
+  }
+
+  .title-block__name {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .title-block__sheets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-inline-start: auto;
+  }
+
+  .title-block__sheets a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-text-muted);
+  }
+
+  .title-block__sheets a[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .title-block__sheets a:hover {
+    color: var(--color-text);
+  }
+
+  .title-block__num {
+    color: var(--color-line-bright);
+  }
+
+  .title-block__sheet-ref {
+    margin: 0;
+    flex-basis: 100%;
+    text-align: end;
+  }
+
+  @media (max-width: 40rem) {
+    .title-block__sheets {
+      margin-inline-start: 0;
+      flex-basis: 100%;
+    }
+  }
+</style>
