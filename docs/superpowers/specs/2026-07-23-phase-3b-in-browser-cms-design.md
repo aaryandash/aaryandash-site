@@ -137,6 +137,13 @@ error. If it round-trips, Option B stands. If it cannot, fall back to **Option A
 
 The fallback is documented so the outcome is deterministic either way.
 
+**Media spike result (2026-07-23): Option B confirmed.** A gallery item whose
+`src` is the exact relative string Sveltia's `public_folder`
+(`../../assets/projects/{{slug}}/…`) produces was added to a real entry and the
+Astro build resolved and optimized it (jpg + four `webp` variants under
+`dist/_astro/`), with no unresolved-path error. The image pipeline and the
+build-plate dimensions are preserved; the Option A fallback was not needed.
+
 ## Data flow
 
 ```
