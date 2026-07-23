@@ -2,11 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { href } from '../lib/paths';
 import { SITE_NAME } from '../lib/meta';
+import homeData from '../data/home.json';
+import { parseHome } from '../lib/homeContent';
 
-// Editable home content. (Externalized for in-browser editing in Phase 3.)
-const subheading = 'Rising junior · mechanical design & CAD';
-const description =
-  'I design mechanisms — FRC robot subsystems, competition CAD, and parts that have to survive contact with reality. I model in Fusion 360, print on a Bambu A1, and iterate until it works.';
+const { subheading, description } = parseHome(homeData);
 ---
 
 <BaseLayout path="/">

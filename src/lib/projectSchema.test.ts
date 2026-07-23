@@ -50,12 +50,20 @@ describe('projectSchema', () => {
     expect(() => schema.parse({ ...valid, heroAlt: '' })).toThrow();
   });
 
-  it('rejects a gallery image with no alt text', () => {
+  it('rejects a gallery image with no title', () => {
     const withBadGallery = {
       ...valid,
-      gallery: [{ src: 'a.webp', alt: '', caption: 'A caption' }],
+      gallery: [{ src: 'a.webp', title: '', caption: 'A caption' }],
     };
     expect(() => schema.parse(withBadGallery)).toThrow();
+  });
+
+  it('treats gallery alt as an optional override of title', () => {
+    const parsed = schema.parse({
+      ...valid,
+      gallery: [{ src: 'a.webp', title: 'Mid-print', caption: '' }],
+    });
+    expect(parsed.gallery[0].alt).toBeUndefined();
   });
 
   it('rejects a project with no tools listed', () => {
