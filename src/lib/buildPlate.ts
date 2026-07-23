@@ -30,3 +30,12 @@ export function printState(progress: number, layers: number): PrintFrame {
     done: p >= 1,
   };
 }
+
+/** Horizontal position (0..1) of the sweeping print head as a triangle wave:
+    0 at the left, 1 at the right at the half period, back to 0 at the full
+    period. `elapsedMs` is time since the print started. */
+export function toolheadSweep(elapsedMs: number, periodMs = 400): number {
+  if (periodMs <= 0) throw new Error('periodMs must be positive');
+  const phase = ((elapsedMs % periodMs) + periodMs) % periodMs / periodMs; // 0..1
+  return phase < 0.5 ? phase * 2 : 2 - phase * 2;
+}

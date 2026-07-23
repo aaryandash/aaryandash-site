@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { emptyBayCount, totalLayers, printState } from './buildPlate';
+import { emptyBayCount, totalLayers, printState, toolheadSweep } from './buildPlate';
 
 describe('emptyBayCount', () => {
   it('fills up to the default target of 4', () => {
@@ -57,5 +57,39 @@ describe('printState', () => {
   it('clamps progress below 0', () => {
     expect(printState(-0.3, 125).clipTop).toBe(100);
     expect(printState(-0.3, 125).layer).toBe(0);
+  });
+});
+
+describe('toolheadSweep', () => {
+  it('starts at the left edge', () => {
+    expect(toolheadSweep(0, 400)).toBeCloseTo(0, 5);
+  });
+
+  it('reaches the right edge at the half period', () => {
+    expect(toolheadSweep(200, 400)).toBeCloseTo(1, 5);
+  });
+
+  it('returns to the left edge at the full period', () => {
+    expect(toolheadSweep(400, 400)).toBeCloseTo(0, 5);
+  });
+
+  it('is halfway across at a quarter period', () => {
+    expect(toolheadSweep(100, 400)).toBeCloseTo(0.5, 5);
+  });
+
+  it('repeats across periods', () => {
+    expect(toolheadSweep(600, 400)).toBeCloseTo(1, 5); // 600 == 200 mod 400
+  });
+
+  it('stays within 0..1', () => {
+    for (let t = 0; t <= 1000; t += 37) {
+      const x = toolheadSweep(t, 400);
+      expect(x).toBeGreaterThanOrEqual(0);
+      expect(x).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it('throws on a non-positive period', () => {
+    expect(() => toolheadSweep(10, 0)).toThrow(/positive/);
   });
 });
