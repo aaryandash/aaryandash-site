@@ -1,4 +1,5 @@
 import { useDroppable } from '@dnd-kit/core';
+import { PrintReveal } from './PrintReveal';
 import type { ImageAsset, PlateProject } from './types';
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
 // top tab and bottom label strip). Tuned visually.
 export const BUILD_AREA = { top: 15, right: 13, bottom: 13, left: 13 };
 
-export function Plate({ loaded, plate }: Props) {
+export function Plate({ loaded, plate, toolhead, onDone }: Props) {
   const { setNodeRef, isOver } = useDroppable({ id: 'build-plate' });
 
   return (
@@ -38,11 +39,7 @@ export function Plate({ loaded, plate }: Props) {
           }}
         >
           {loaded ? (
-            <img
-              className="bed__part"
-              src={loaded.print.src}
-              alt={loaded.heroAlt}
-            />
+            <PrintReveal project={loaded} toolhead={toolhead} onDone={onDone} />
           ) : (
             <p className="bed__hint">Drop a part here</p>
           )}

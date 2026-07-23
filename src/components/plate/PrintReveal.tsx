@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { animate } from 'motion';
-import { printState, totalLayers } from '../../lib/buildPlate';
-import type { PlateProject } from './types';
+import { printState, totalLayers, toolheadSweep } from '../../lib/buildPlate';
+import { ProgressBar } from './ProgressBar';
+import type { ImageAsset, PlateProject } from './types';
+
+const DURATION_MS = 1600;
 
 function prefersReducedMotion(): boolean {
   return (
@@ -12,9 +15,11 @@ function prefersReducedMotion(): boolean {
 
 export function PrintReveal({
   project,
+  toolhead,
   onDone,
 }: {
   project: PlateProject;
+  toolhead: ImageAsset;
   onDone: () => void;
 }) {
   const layers = totalLayers(project.heightMm, project.layerHeightMm);
@@ -28,32 +33,42 @@ export function PrintReveal({
     }
     setProgress(0);
     const controls = animate(0, 1, {
-      duration: 1.6,
+      duration: DURATION_MS / 1000,
       ease: 'linear',
       onUpdate: (v) => setProgress(v),
       onComplete: () => onDone(),
     });
     return () => controls.stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.id]);
 
   const frame = printState(progress, layers);
+  const elapsedMs = progress * DURATION_MS;
+  const sweep = toolheadSweep(elapsedMs); // 0..1 across the build width
 
   return (
-    <figure className="reveal">
-      <img
-        className="reveal__img"
-        src={project.img.src}
-        width={project.img.width}
-        height={project.img.height}
-        alt={project.heroAlt}
-        style={{ clipPath: `inset(${frame.clipTop}% 0 0 0)` }}
-      />
-      {!frame.done && (
-        <div className="reveal__nozzle" style={{ top: `${frame.clipTop}%` }} aria-hidden="true" />
-      )}
-      <figcaption className="reveal__readout">
-        LAYER {frame.layer}/{layers}
-      </figcaption>
-    </figure>
+    <div className="reveal">
+      <div className="reveal__stage">
+        <img
+          className="reveal__part"
+          src={project.print.src}
+          alt={project.heroAlt}
+          style={{ clipPath: `inset(${frame.clipTop}% 0 0 0)` }}
+        />
+        {!frame.done && (
+          <img
+            className="reveal__toolhead"
+            src={toolhead.src}
+            alt=""
+            aria-hidden="true"
+            style={{
+              top: `${frame.clipTop}%`,
+              left: `${sweep * 100}%`,
+            }}
+          />
+        )}
+      </div>
+      <ProgressBar progress={progress} layer={frame.layer} layers={layers} />
+    </div>
   );
 }
