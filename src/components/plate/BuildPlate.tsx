@@ -1,6 +1,16 @@
 import './plate.css';
+import { useEffect, useState } from 'react';
+import {
+  DndContext,
+  PointerSensor,
+  pointerWithin,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
 import { PartChip } from './PartChip';
 import { EmptyBay } from './EmptyBay';
+import { Plate } from './Plate';
 import type { PlateProject } from './types';
 
 interface Props {
@@ -9,20 +19,54 @@ interface Props {
 }
 
 export default function BuildPlate({ projects, bays }: Props) {
+  const [dragEnabled, setDragEnabled] = useState(false);
+  const [loaded, setLoaded] = useState<PlateProject | null>(null);
+
+  useEffect(() => {
+    setDragEnabled(window.matchMedia('(pointer: fine)').matches);
+  }, []);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  );
+
+  function onDragEnd(event: DragEndEvent) {
+    if (event.over?.id === 'build-plate') {
+      const dropped = projects.find((p) => p.id === event.active.id);
+      if (dropped) setLoaded(dropped);
+    }
+  }
+
+  const bin = (
+    <ul className="bin">
+      {projects.map((p) => (
+        <li key={p.id}>
+          <PartChip project={p} dragEnabled={dragEnabled} />
+        </li>
+      ))}
+      {Array.from({ length: bays }).map((_, i) => (
+        <li key={`bay-${i}`}>
+          <EmptyBay />
+        </li>
+      ))}
+    </ul>
+  );
+
+  // Coarse pointer (touch) and the pre-mount server render: plain grid, no plate.
+  if (!dragEnabled) {
+    return <div className="build-plate build-plate--grid">{bin}</div>;
+  }
+
   return (
-    <div className="build-plate build-plate--grid">
-      <ul className="bin">
-        {projects.map((p) => (
-          <li key={p.id}>
-            <PartChip project={p} dragEnabled={false} />
-          </li>
-        ))}
-        {Array.from({ length: bays }).map((_, i) => (
-          <li key={`bay-${i}`}>
-            <EmptyBay />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={pointerWithin}
+      onDragEnd={onDragEnd}
+    >
+      <div className="build-plate">
+        <div className="build-plate__bin">{bin}</div>
+        <Plate loaded={loaded} />
+      </div>
+    </DndContext>
   );
 }
