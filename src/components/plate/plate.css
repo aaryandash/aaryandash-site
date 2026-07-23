@@ -118,6 +118,14 @@
   text-align: center;
 }
 
+.parts-list__caption {
+  margin: var(--space-md) 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+}
+
 @media (max-width: 52rem) {
   .bench {
     grid-template-columns: 1fr;
