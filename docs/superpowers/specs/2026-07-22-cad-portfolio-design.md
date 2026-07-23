@@ -198,9 +198,34 @@ Content preparation cannot be automated and gates phase 2:
 
 This is the difference between an impressive portfolio and a well-built empty shell.
 
+## Interactive 3D (Phase 2)
+
+Each project sheet may offer an optional interactive 3D view of the part, using
+the `<model-viewer>` web component loading a `.glb`.
+
+The rule that makes this affordable: **the static render is always the default
+and the LCP element.** The 3D viewer is loaded only on an explicit "View in 3D"
+action, which lazy-loads the viewer library and the model. This preserves the
+zero-JS baseline on initial load, keeps the no-JavaScript fallback (the render),
+and keeps the performance budget intact for the common case — an admissions
+reader skimming on a phone never pays for the viewer unless they ask for it.
+
+Constraints:
+- Static render loads first, every time. The viewer never blocks paint.
+- Viewer library and model are lazy-loaded on interaction only.
+- Each `.glb` should be decimated to stay under ~2MB.
+- A project with no `.glb` simply shows the render and no button — the field is
+  optional in the schema.
+
+Rejected alternatives: an Onshape iframe embed (requires a public document,
+carries external branding, and breaks the drawing-set aesthetic) and raw
+three.js (heavier and more build effort for no gain over `model-viewer` at this
+scale).
+
 ## Explicitly out of scope
 
-- Real-time 3D model viewers (three.js). Pre-rendered imagery is faster and looks better at this scale.
+- Raw three.js hand-rolled viewers. `<model-viewer>` covers the need; see the
+  Interactive 3D section.
 - Live Spotify or third-party API integration.
 - Blog or writing section.
 - Analytics.

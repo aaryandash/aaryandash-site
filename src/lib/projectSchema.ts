@@ -26,6 +26,13 @@ export function projectSchema({ image }: { image: ImageFn }) {
     heroAlt: z.string().min(1),
     sectionRender: image().optional(),
     sectionAlt: z.string().min(1).optional(),
+    /**
+     * Optional interactive 3D model (.glb), shown behind a "View in 3D"
+     * button on the project sheet. Not an image() — it is not run through the
+     * image pipeline; it is a path/import to a binary asset. Omit it and the
+     * sheet simply shows the static render with no button.
+     */
+    model: z.string().optional(),
     gallery: z
       .array(
         z.object({

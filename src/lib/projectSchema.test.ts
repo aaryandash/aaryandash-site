@@ -69,4 +69,13 @@ describe('projectSchema', () => {
   it('rejects a summary longer than 200 characters', () => {
     expect(() => schema.parse({ ...valid, summary: 'x'.repeat(201) })).toThrow();
   });
+
+  it('treats the 3D model as optional', () => {
+    expect(schema.parse(valid).model).toBeUndefined();
+  });
+
+  it('accepts a project with a 3D model path', () => {
+    const parsed = schema.parse({ ...valid, model: './intake.glb' });
+    expect(parsed.model).toBe('./intake.glb');
+  });
 });
