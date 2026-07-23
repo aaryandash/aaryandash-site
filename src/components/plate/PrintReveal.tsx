@@ -10,13 +10,20 @@ function prefersReducedMotion(): boolean {
   );
 }
 
-export function PrintReveal({ project }: { project: PlateProject }) {
+export function PrintReveal({
+  project,
+  onDone,
+}: {
+  project: PlateProject;
+  onDone: () => void;
+}) {
   const layers = totalLayers(project.heightMm, project.layerHeightMm);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (prefersReducedMotion()) {
       setProgress(1);
+      onDone();
       return;
     }
     setProgress(0);
@@ -24,6 +31,7 @@ export function PrintReveal({ project }: { project: PlateProject }) {
       duration: 1.6,
       ease: 'linear',
       onUpdate: (v) => setProgress(v),
+      onComplete: () => onDone(),
     });
     return () => controls.stop();
   }, [project.id]);

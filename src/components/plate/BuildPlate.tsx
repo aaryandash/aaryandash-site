@@ -21,6 +21,7 @@ interface Props {
 export default function BuildPlate({ projects, bays }: Props) {
   const [dragEnabled, setDragEnabled] = useState(false);
   const [loaded, setLoaded] = useState<PlateProject | null>(null);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     setDragEnabled(window.matchMedia('(pointer: fine)').matches);
@@ -33,7 +34,10 @@ export default function BuildPlate({ projects, bays }: Props) {
   function onDragEnd(event: DragEndEvent) {
     if (event.over?.id === 'build-plate') {
       const dropped = projects.find((p) => p.id === event.active.id);
-      if (dropped) setLoaded(dropped);
+      if (dropped) {
+        setDone(false);
+        setLoaded(dropped);
+      }
     }
   }
 
@@ -65,7 +69,7 @@ export default function BuildPlate({ projects, bays }: Props) {
     >
       <div className="build-plate">
         <div className="build-plate__bin">{bin}</div>
-        <Plate loaded={loaded} />
+        <Plate loaded={loaded} done={done} onDone={() => setDone(true)} />
       </div>
     </DndContext>
   );
