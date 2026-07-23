@@ -23,6 +23,10 @@ export function projectSchema({ image }: { image: ImageFn }) {
         Optional; the plate falls back to sensible defaults. */
     heightMm: z.number().positive().optional(),
     layerHeightMm: z.number().positive().optional(),
+    /** Transparent print image (PNG with alpha) used for the build-plate
+        print reveal, so the part reads as sitting on the bed. Optional;
+        the plate falls back to heroRender when absent. */
+    printTransparent: image().optional(),
     specs: z
       .array(z.object({ label: z.string().min(1), value: z.string().min(1) }))
       .default([]),

@@ -78,4 +78,13 @@ describe('projectSchema', () => {
     const parsed = schema.parse({ ...valid, model: './intake.glb' });
     expect(parsed.model).toBe('./intake.glb');
   });
+
+  it('treats printTransparent as optional', () => {
+    expect(schema.parse(valid).printTransparent).toBeUndefined();
+  });
+
+  it('accepts a printTransparent image path', () => {
+    const parsed = schema.parse({ ...valid, printTransparent: 'print.png' });
+    expect(parsed.printTransparent).toBe('print.png');
+  });
 });
