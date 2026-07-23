@@ -1,6 +1,12 @@
 import type { PlateProject } from './types';
 
-export function SummaryPanel({ project }: { project: PlateProject }) {
+export function SummaryPanel({
+  project,
+  onClear,
+}: {
+  project: PlateProject;
+  onClear: () => void;
+}) {
   return (
     <div className="summary-panel">
       <p className="summary-panel__title">{project.title}</p>
@@ -10,9 +16,14 @@ export function SummaryPanel({ project }: { project: PlateProject }) {
           <span>{project.leadSpec.value}</span>
         </p>
       )}
-      <a className="summary-panel__link" href={project.href}>
-        Open project sheet →
-      </a>
+      <div className="summary-panel__actions">
+        <a className="summary-panel__link" href={project.href}>
+          Open project sheet →
+        </a>
+        <button type="button" className="summary-panel__clear" onClick={onClear}>
+          Clear plate
+        </button>
+      </div>
     </div>
   );
 }

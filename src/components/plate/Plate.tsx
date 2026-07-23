@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 import { PrintReveal } from './PrintReveal';
+import { SummaryPanel } from './SummaryPanel';
 import type { ImageAsset, PlateProject } from './types';
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 // top tab and bottom label strip). Tuned visually.
 export const BUILD_AREA = { top: 15, right: 13, bottom: 13, left: 13 };
 
-export function Plate({ loaded, plate, toolhead, onDone }: Props) {
+export function Plate({ loaded, plate, toolhead, done, onDone, onClear }: Props) {
   const { setNodeRef, isOver } = useDroppable({ id: 'build-plate' });
 
   return (
@@ -45,6 +46,9 @@ export function Plate({ loaded, plate, toolhead, onDone }: Props) {
           )}
         </div>
       </div>
+      {loaded && done && (
+        <SummaryPanel project={loaded} onClear={onClear} />
+      )}
     </div>
   );
 }
