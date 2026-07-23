@@ -1,12 +1,38 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PartCard from '../../components/PartCard.astro';
+import BuildPlate from '../../components/plate/BuildPlate.tsx';
 import EmptyBin from '../../components/EmptyBin.astro';
+import { emptyBayCount } from '../../lib/buildPlate';
+import { href } from '../../lib/paths';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
 );
+
+const TARGET_WIDTH = 800;
+
+const plateProjects = await Promise.all(
+  projects.map(async (p) => {
+    const meta = p.data.heroRender;
+    const height = Math.round(TARGET_WIDTH * (meta.height / meta.width));
+    const img = await getImage({ src: meta, width: TARGET_WIDTH, format: 'webp' });
+    return {
+      id: p.id,
+      title: p.data.title,
+      season: p.data.season,
+      href: href(`/projects/${p.id}`),
+      heroAlt: p.data.heroAlt,
+      img: { src: img.src, width: TARGET_WIDTH, height },
+      leadSpec: p.data.specs[0] ?? { label: '', value: '' },
+      heightMm: p.data.heightMm ?? 25,
+      layerHeightMm: p.data.layerHeightMm ?? 0.2,
+    };
+  }),
+);
+
+const bays = emptyBayCount(plateProjects.length);
 ---
 
 <BaseLayout
@@ -16,18 +42,11 @@ const projects = (await getCollection('projects')).sort(
 >
   <section aria-labelledby="parts-bin-heading" class="parts-bin">
     <h1 id="parts-bin-heading">Parts bin</h1>
-    <p class="parts-bin__note annotation">
-      {projects.length} {projects.length === 1 ? 'part' : 'parts'} on file
-    </p>
 
-    {projects.length > 0 ? (
-      <ul class="parts-bin__list">
-        {projects.map((project) => <PartCard project={project} />)}
-      </ul>
+    {plateProjects.length > 0 ? (
+      <BuildPlate client:visible projects={plateProjects} bays={bays} />
     ) : (
-      <div class="parts-bin__empty">
-        <EmptyBin />
-      </div>
+      <div class="parts-bin__empty"><EmptyBin /></div>
     )}
   </section>
 </BaseLayout>
@@ -40,15 +59,6 @@ const projects = (await getCollection('projects')).sort(
   .parts-bin h1 {
     font-size: clamp(2rem, 6vw, 3rem);
     margin-block-end: var(--space-sm);
-  }
-
-  .parts-bin__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-lg);
-    list-style: none;
-    margin: var(--space-lg) 0 0;
-    padding: 0;
   }
 
   .parts-bin__empty {

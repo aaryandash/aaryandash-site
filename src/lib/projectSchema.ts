@@ -19,6 +19,10 @@ export function projectSchema({ image }: { image: ImageFn }) {
     summary: z.string().min(1).max(200),
     tools: z.array(z.string().min(1)).min(1),
     materials: z.array(z.string().min(1)).default([]),
+    /** Print geometry, for an honest LAYER readout on the build plate.
+        Optional; the plate falls back to sensible defaults. */
+    heightMm: z.number().positive().optional(),
+    layerHeightMm: z.number().positive().optional(),
     specs: z
       .array(z.object({ label: z.string().min(1), value: z.string().min(1) }))
       .default([]),
