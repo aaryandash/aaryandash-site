@@ -9,16 +9,17 @@ import {
   type DragEndEvent,
 } from '@dnd-kit/core';
 import { PartChip } from './PartChip';
-import { EmptyBay } from './EmptyBay';
 import { Plate } from './Plate';
-import type { PlateProject } from './types';
+import { PartsList } from './PartsList';
+import type { ImageAsset, PlateProject } from './types';
 
 interface Props {
   projects: PlateProject[];
-  bays: number;
+  plate: ImageAsset;
+  toolhead: ImageAsset;
 }
 
-export default function BuildPlate({ projects, bays }: Props) {
+export default function BuildPlate({ projects, plate, toolhead }: Props) {
   const [dragEnabled, setDragEnabled] = useState(false);
   const [loaded, setLoaded] = useState<PlateProject | null>(null);
   const [done, setDone] = useState(false);
@@ -41,24 +42,9 @@ export default function BuildPlate({ projects, bays }: Props) {
     }
   }
 
-  const bin = (
-    <ul className="bin">
-      {projects.map((p) => (
-        <li key={p.id}>
-          <PartChip project={p} dragEnabled={dragEnabled} />
-        </li>
-      ))}
-      {Array.from({ length: bays }).map((_, i) => (
-        <li key={`bay-${i}`}>
-          <EmptyBay />
-        </li>
-      ))}
-    </ul>
-  );
-
-  // Coarse pointer (touch) and the pre-mount server render: plain grid, no plate.
+  // Coarse pointer (touch) and the pre-mount server render: tappable list.
   if (!dragEnabled) {
-    return <div className="build-plate build-plate--grid">{bin}</div>;
+    return <PartsList projects={projects} />;
   }
 
   return (
@@ -67,9 +53,28 @@ export default function BuildPlate({ projects, bays }: Props) {
       collisionDetection={pointerWithin}
       onDragEnd={onDragEnd}
     >
-      <div className="build-plate">
-        <div className="build-plate__bin">{bin}</div>
-        <Plate loaded={loaded} done={done} onDone={() => setDone(true)} />
+      <p className="bench__hint">
+        Drag a part onto the plate and print it to open the write-up.
+      </p>
+      <div className="bench">
+        <ul className="shelf">
+          {projects.map((p) => (
+            <li key={p.id}>
+              <PartChip project={p} dragEnabled={dragEnabled} />
+            </li>
+          ))}
+        </ul>
+        <Plate
+          loaded={loaded}
+          plate={plate}
+          toolhead={toolhead}
+          done={done}
+          onDone={() => setDone(true)}
+          onClear={() => {
+            setLoaded(null);
+            setDone(false);
+          }}
+        />
       </div>
     </DndContext>
   );

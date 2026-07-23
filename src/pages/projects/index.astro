@@ -4,8 +4,9 @@ import { getImage } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BuildPlate from '../../components/plate/BuildPlate.tsx';
 import EmptyBin from '../../components/EmptyBin.astro';
-import { emptyBayCount } from '../../lib/buildPlate';
 import { href } from '../../lib/paths';
+import plateMeta from '../../assets/plate/textured-plate.png';
+import toolheadMeta from '../../assets/plate/a1-toolhead.png';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -13,38 +14,44 @@ const projects = (await getCollection('projects')).sort(
 
 const TARGET_WIDTH = 800;
 
+async function resolve(meta: ImageMetadata, width: number) {
+  const height = Math.round(width * (meta.height / meta.width));
+  const img = await getImage({ src: meta, width, format: 'webp' });
+  return { src: img.src, width, height };
+}
+
+const plate = await resolve(plateMeta, 640);
+const toolhead = await resolve(toolheadMeta, 160);
+
 const plateProjects = await Promise.all(
   projects.map(async (p) => {
-    const meta = p.data.heroRender;
-    const height = Math.round(TARGET_WIDTH * (meta.height / meta.width));
-    const img = await getImage({ src: meta, width: TARGET_WIDTH, format: 'webp' });
+    const printMeta = p.data.printTransparent ?? p.data.heroRender;
     return {
       id: p.id,
       title: p.data.title,
       season: p.data.season,
       href: href(`/projects/${p.id}`),
       heroAlt: p.data.heroAlt,
-      img: { src: img.src, width: TARGET_WIDTH, height },
+      img: await resolve(p.data.heroRender, TARGET_WIDTH),
+      print: await resolve(printMeta, TARGET_WIDTH),
       leadSpec: p.data.specs[0] ?? { label: '', value: '' },
       heightMm: p.data.heightMm ?? 25,
       layerHeightMm: p.data.layerHeightMm ?? 0.2,
     };
   }),
 );
-
-const bays = emptyBayCount(plateProjects.length);
 ---
 
 <BaseLayout
   title="Projects"
-  description="CAD and mechanical design work — FRC robotics subsystems and competition entries."
+  description="CAD and mechanical design work — printed to open on the build plate."
   path="/projects"
 >
   <section aria-labelledby="parts-bin-heading" class="parts-bin">
     <h1 id="parts-bin-heading">Parts bin</h1>
 
     {plateProjects.length > 0 ? (
-      <BuildPlate client:visible projects={plateProjects} bays={bays} />
+      <BuildPlate client:visible projects={plateProjects} plate={plate} toolhead={toolhead} />
     ) : (
       <div class="parts-bin__empty"><EmptyBin /></div>
     )}
