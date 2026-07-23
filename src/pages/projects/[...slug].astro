@@ -82,11 +82,16 @@ const { data } = project;
 
   .sheet-hero-frame {
     position: relative;
+    max-width: 40rem;
+    margin-inline: auto;
   }
 
   .sheet-hero {
     display: block;
     width: 100%;
+    height: auto;
+    max-height: 75vh;
+    object-fit: contain;
     border: var(--stroke-thin) solid var(--color-line-bright);
   }
 
