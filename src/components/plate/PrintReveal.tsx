@@ -4,7 +4,9 @@ import { printState, totalLayers, toolheadSweep } from '../../lib/buildPlate';
 import { ProgressBar } from './ProgressBar';
 import type { ImageAsset, PlateProject } from './types';
 
-const DURATION_MS = 1600;
+const DURATION_MS = 2800;
+/** Milliseconds for one full left→right→left toolhead pass. Higher = calmer. */
+const SWEEP_PERIOD_MS = 900;
 
 function prefersReducedMotion(): boolean {
   return (
@@ -44,7 +46,7 @@ export function PrintReveal({
 
   const frame = printState(progress, layers);
   const elapsedMs = progress * DURATION_MS;
-  const sweep = toolheadSweep(elapsedMs); // 0..1 across the build width
+  const sweep = toolheadSweep(elapsedMs, SWEEP_PERIOD_MS); // 0..1 across the build width
 
   return (
     <div className="reveal">
