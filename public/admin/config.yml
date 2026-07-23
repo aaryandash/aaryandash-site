@@ -2,10 +2,10 @@ backend:
   name: github
   repo: aaryandash/aaryandash-site
   branch: main
-  # base_url is set in Phase 3b-ii (Cloudflare Worker OAuth relay). Unused in
-  # Sveltia's local-repository mode ("Work with Local Repository"), which needs
-  # no flag — local editing is always available in dev.
-  base_url: https://cms-auth.invalid
+  # Cloudflare Worker OAuth relay (workers/cms-auth). Unused in Sveltia's
+  # local-repository mode ("Work with Local Repository"); only the live
+  # GitHub-backed sign-in at the deployed /admin uses it.
+  base_url: https://aaryandash-cms-auth.aaryandash.workers.dev
 
 media_folder: public/uploads
 public_folder: /uploads
