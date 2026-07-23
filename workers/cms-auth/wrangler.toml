@@ -1,0 +1,12 @@
+name = "aaryandash-cms-auth"
+main = "src/index.js"
+compatibility_date = "2023-03-24"
+
+# Origins allowed to complete the OAuth flow. Add the custom domain here when
+# aaryandash.com goes live (comma-separated).
+[vars]
+ALLOWED_DOMAINS = "aaryandash.github.io"
+
+# Secrets are NOT stored here. Set them at deploy time:
+#   npx wrangler secret put GITHUB_CLIENT_ID
+#   npx wrangler secret put GITHUB_CLIENT_SECRET
