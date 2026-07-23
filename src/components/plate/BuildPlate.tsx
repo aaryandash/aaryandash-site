@@ -23,6 +23,7 @@ export default function BuildPlate({ projects, plate, toolhead }: Props) {
   const [dragEnabled, setDragEnabled] = useState(false);
   const [loaded, setLoaded] = useState<PlateProject | null>(null);
   const [done, setDone] = useState(false);
+  const [printKey, setPrintKey] = useState(0);
 
   useEffect(() => {
     setDragEnabled(window.matchMedia('(pointer: fine)').matches);
@@ -38,6 +39,7 @@ export default function BuildPlate({ projects, plate, toolhead }: Props) {
       if (dropped) {
         setDone(false);
         setLoaded(dropped);
+        setPrintKey((k) => k + 1);
       }
     }
   }
@@ -69,6 +71,7 @@ export default function BuildPlate({ projects, plate, toolhead }: Props) {
           plate={plate}
           toolhead={toolhead}
           done={done}
+          printKey={printKey}
           onDone={() => setDone(true)}
           onClear={() => {
             setLoaded(null);

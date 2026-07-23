@@ -102,12 +102,6 @@
   overflow: hidden;
 }
 
-.bed__part {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
 .bed__hint {
   margin: 0;
   font-family: var(--font-mono);
@@ -163,7 +157,7 @@
   height: auto;
   transform: translate(-50%, -82%);
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 2px 4px color-mix(in srgb, var(--color-canvas) 70%, transparent));
 }
 
 .progress {

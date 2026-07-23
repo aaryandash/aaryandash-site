@@ -8,6 +8,7 @@ interface Props {
   plate: ImageAsset;
   toolhead: ImageAsset;
   done: boolean;
+  printKey: number;
   onDone: () => void;
   onClear: () => void;
 }
@@ -16,7 +17,7 @@ interface Props {
 // top tab and bottom label strip). Tuned visually.
 export const BUILD_AREA = { top: 15, right: 13, bottom: 13, left: 13 };
 
-export function Plate({ loaded, plate, toolhead, done, onDone, onClear }: Props) {
+export function Plate({ loaded, plate, toolhead, done, printKey, onDone, onClear }: Props) {
   const { setNodeRef, isOver } = useDroppable({ id: 'build-plate' });
 
   return (
@@ -40,7 +41,7 @@ export function Plate({ loaded, plate, toolhead, done, onDone, onClear }: Props)
           }}
         >
           {loaded ? (
-            <PrintReveal project={loaded} toolhead={toolhead} onDone={onDone} />
+            <PrintReveal key={printKey} project={loaded} toolhead={toolhead} onDone={onDone} />
           ) : (
             <p className="bed__hint">Drop a part here</p>
           )}
