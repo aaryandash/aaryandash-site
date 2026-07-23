@@ -1,0 +1,71 @@
+---
+title: 'Graded Gyroid Biofilter'
+order: 1
+season: 'Princeton iGEM PITCCH · 2026'
+role: 'Solo submission'
+summary: 'A mathematically graded gyroid bio-filter that nearly doubled the reference surface area while printing support-free — for a Princeton iGEM CAD competition.'
+tools: ['Fusion 360', 'Bambu Studio']
+materials: ['PLA']
+specs:
+  - label: 'Surface area'
+    value: '12,850 mm² (≈2× the 6,509 mm² reference)'
+  - label: 'Envelope'
+    value: 'Ø20 × 25 mm cylinder'
+  - label: 'Process'
+    value: 'FDM · 0.2 mm layer · 0.4 mm nozzle · no supports'
+  - label: 'Material'
+    value: 'PLA'
+  - label: 'Iterations'
+    value: '4'
+heroRender: '../../assets/projects/pitcch-biofilter/hero.png'
+heroAlt: 'Render of the graded gyroid biofilter — a cylinder whose lattice cells open into coarse pores at the top and tighten into a dense mesh at the base.'
+sectionRender: '../../assets/projects/pitcch-biofilter/section-y.png'
+sectionAlt: 'Vertical section slice map of the filter, showing wavy open channels near the top grading into tightly packed cells at the base.'
+gallery:
+  - src: '../../assets/projects/pitcch-biofilter/finished-print.jpg'
+    alt: 'The printed filter in white PLA sitting on a wooden desk, its graded lattice matching the render.'
+    caption: 'Printed in PLA on a Bambu A1 Mini — render vs. reality.'
+  - src: '../../assets/projects/pitcch-biofilter/mid-print.jpg'
+    alt: 'The filter partway through printing on a Bambu Lab printer, the dense base lattice being laid down layer by layer.'
+    caption: 'Mid-print: the fine base lattice going down first, no supports.'
+  - src: '../../assets/projects/pitcch-biofilter/section-y.png'
+    alt: 'Section slice map in navy and coral showing the continuous grade from open top channels to dense base cells.'
+    caption: 'Y section slice map — the continuous grade from 5 mm to 2 mm cells.'
+featured: true
+---
+
+## The constraint
+
+Design a 3D-printed bio-filter — a Ø20 × 25 mm cylinder — that maximizes internal
+contact surface area, the exact metric the competition scored filtration efficiency
+on. The hard limit sat on the manufacturing side: every submission had to print on a
+Bambu A1 Mini in PLA at a 0.2 mm layer height with **no supports and no adhesion
+aids**, and any model that failed to print under those parameters was disqualified.
+So every gain in surface area had to survive as a clean, support-free print. The
+reference model — a uniform 5 mm gyroid — set the bar at 6,508 mm².
+
+## What I tried
+
+I started from a uniform gyroid, then graded it, packing more material near the top
+and less near the bottom. To push surface area further I wanted to grade both cell
+*size* and *solidity* down the height: a coarse, open top for flow and a fine, dense
+base to trap contaminant. Fusion 360 can't vary gyroid cell size continuously, so I
+split the filter into three stacked gyroids — 5 mm, 3 mm, and 2 mm cells — grading
+solidity 30% → 45% → 60% down the stack.
+
+## What failed
+
+The three-gyroid stack didn't hold together. At each boundary the cells from adjacent
+segments wouldn't line up, leaving broken walls where the lattices met. On a
+support-free print those discontinuities are print failures — and a failed print meant
+disqualification. Segmenting the geometry had traded a scoring problem for a
+manufacturability one.
+
+## What shipped
+
+I dropped Fusion's lattice tools and generated the gyroid mathematically, from a single
+continuous function grading smoothly from 5 mm / 30% at the top to 2 mm / 60% at the
+base. Because it's one field rather than stitched segments, every cell aligns with its
+neighbors — no discontinuities, no supports needed. The final filter measured
+12,850 mm² of surface area, nearly double the reference, and printed cleanly in a
+single pass. Four iterations from first gyroid to final.
