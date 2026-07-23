@@ -1,60 +1,43 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PartCard from '../components/PartCard.astro';
-import EmptyBin from '../components/EmptyBin.astro';
 import { href } from '../lib/paths';
 import { SITE_NAME } from '../lib/meta';
 
-const all = await getCollection('projects');
-const featured = all
-  .filter((project) => project.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
-
-/** Never show an empty home page: fall back to everything if nothing is flagged. */
-const shown = featured.length > 0
-  ? featured
-  : [...all].sort((a, b) => a.data.order - b.data.order);
+// Editable home content. (Externalized for in-browser editing in Phase 3.)
+const subheading = 'Rising junior · mechanical design & CAD';
+const description =
+  'I design mechanisms — FRC robot subsystems, competition CAD, and parts that have to survive contact with reality. I model in Fusion 360, print on a Bambu A1, and iterate until it works.';
 ---
 
 <BaseLayout path="/">
   <section class="hero">
-    <p class="annotation">Mechanical engineering · Portfolio</p>
+    <p class="annotation">Portfolio</p>
     <h1>{SITE_NAME}</h1>
-    <p class="hero__lede prose">
-      I design mechanisms — FRC robot subsystems, competition CAD, and parts that
-      have to survive contact with reality.
+    <p class="hero__sub">{subheading}</p>
+    <p class="hero__lede prose">{description}</p>
+    <p class="hero__cta">
+      <a href={href('/projects')} class="button">View projects →</a>
     </p>
-  </section>
-
-  <section aria-labelledby="featured-heading" class="featured">
-    <h2 id="featured-heading" class="annotation">Selected work</h2>
-
-    {shown.length > 0 ? (
-      <>
-        <ul class="featured__list">
-          {shown.map((project) => <PartCard project={project} />)}
-        </ul>
-        <p class="featured__more">
-          <a href={href('/projects')}>All projects →</a>
-        </p>
-      </>
-    ) : (
-      <EmptyBin note="Projects are being drawn up. Check back shortly." />
-    )}
   </section>
 </BaseLayout>
 
 <style>
   .hero {
     padding-block: var(--space-xl);
-    border-block-end: var(--stroke-thin) solid var(--color-line-bright);
+    max-width: 46rem;
   }
 
   .hero h1 {
     font-size: clamp(2.5rem, 8vw, 5rem);
-    margin-block: var(--space-sm) var(--space-md);
+    margin-block: var(--space-sm) var(--space-xs);
     letter-spacing: 0.04em;
+  }
+
+  .hero__sub {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    letter-spacing: 0.04em;
+    margin-block: 0 var(--space-md);
   }
 
   .hero__lede {
@@ -62,21 +45,23 @@ const shown = featured.length > 0
     font-size: 1.125rem;
   }
 
-  .featured {
-    padding-block: var(--space-xl);
-  }
-
-  .featured__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-lg);
-    list-style: none;
-    margin: var(--space-lg) 0 0;
-    padding: 0;
-  }
-
-  .featured__more {
+  .hero__cta {
     margin-block-start: var(--space-lg);
+  }
+
+  .button {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-lg);
+    border: var(--stroke-medium) solid var(--color-accent);
     font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--color-accent);
+    transition: background-color 120ms ease-out, color 120ms ease-out;
+  }
+
+  .button:hover {
+    background-color: var(--color-accent);
+    color: var(--color-canvas);
   }
 </style>
