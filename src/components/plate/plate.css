@@ -125,3 +125,44 @@
     position: static;
   }
 }
+
+.reveal {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.reveal__img {
+  display: block;
+  max-width: 100%;
+  max-height: 30rem;
+  object-fit: contain;
+  /* The unclipped region carries a faint layer-line texture. */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    color-mix(in srgb, var(--color-accent) 8%, transparent) 3px,
+    color-mix(in srgb, var(--color-accent) 8%, transparent) 4px
+  );
+}
+
+.reveal__nozzle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--stroke-medium);
+  background-color: var(--color-accent);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--color-accent) 60%, transparent);
+  pointer-events: none;
+}
+
+.reveal__readout {
+  margin-block-start: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+}

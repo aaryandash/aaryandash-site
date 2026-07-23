@@ -1,4 +1,5 @@
 import { useDroppable } from '@dnd-kit/core';
+import { PrintReveal } from './PrintReveal';
 import type { PlateProject } from './types';
 
 interface Props {
@@ -11,13 +12,7 @@ export function Plate({ loaded }: Props) {
   return (
     <div ref={setNodeRef} className="plate" data-over={isOver || undefined}>
       {loaded ? (
-        <img
-          className="plate__render"
-          src={loaded.img.src}
-          width={loaded.img.width}
-          height={loaded.img.height}
-          alt={loaded.heroAlt}
-        />
+        <PrintReveal project={loaded} />
       ) : (
         <p className="plate__hint">Drag a part onto the plate</p>
       )}
