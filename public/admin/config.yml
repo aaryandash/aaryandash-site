@@ -1,0 +1,71 @@
+backend:
+  name: github
+  repo: aaryandash/aaryandash-site
+  branch: main
+  # base_url is set in Phase 3b-ii (Cloudflare Worker OAuth relay). Unused in
+  # Sveltia's local-repository mode ("Work with Local Repository"), which needs
+  # no flag — local editing is always available in dev.
+  base_url: https://cms-auth.invalid
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    extension: mdx
+    format: frontmatter
+    create: true
+    slug: '{{slug}}'
+    # Relative to the entry file's folder (src/content/projects), so uploads land
+    # in src/assets/projects/<slug>/ and frontmatter stores the relative path the
+    # Astro image() pipeline resolves. Verified by the Task 3 spike.
+    media_folder: '../../assets/projects/{{slug}}'
+    public_folder: '../../assets/projects/{{slug}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: order, label: Sort order, widget: number, value_type: int, min: 0 }
+      - { name: season, label: Season, widget: string }
+      - { name: role, label: Role, widget: string }
+      - { name: summary, label: Summary (max 200), widget: string, pattern: ['^.{1,200}$', 'Must be 1–200 characters'] }
+      - { name: tools, label: Tools, widget: list, min: 1, field: { name: tool, label: Tool, widget: string } }
+      - { name: materials, label: Materials, widget: list, required: false, field: { name: material, label: Material, widget: string } }
+      - { name: heightMm, label: Print height (mm), widget: number, required: false, value_type: float }
+      - { name: layerHeightMm, label: Layer height (mm), widget: number, required: false, value_type: float }
+      - { name: printTransparent, label: Transparent print image (PNG), widget: image, required: false }
+      - name: specs
+        label: Specs
+        widget: list
+        required: false
+        fields:
+          - { name: label, label: Label, widget: string }
+          - { name: value, label: Value, widget: string }
+      - { name: heroRender, label: Hero render, widget: image }
+      - { name: heroAlt, label: Hero alt text, widget: string }
+      - { name: sectionRender, label: Section render, widget: image, required: false }
+      - { name: sectionAlt, label: Section alt text, widget: string, required: false }
+      - { name: model, label: 3D model path (.glb), widget: string, required: false }
+      - name: gallery
+        label: Gallery
+        label_singular: Image
+        widget: list
+        required: false
+        summary: '{{fields.title}}'
+        fields:
+          - { name: src, label: Image, widget: image }
+          - { name: title, label: Title, widget: string }
+          - { name: alt, label: Alt text (optional), widget: string, required: false }
+          - { name: caption, label: Caption (optional), widget: string, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: body, label: Write-up, widget: markdown }
+  - name: site
+    label: Site
+    files:
+      - name: home
+        label: Home page
+        file: src/data/home.json
+        fields:
+          - { name: subheading, label: Subheading, widget: string }
+          - { name: description, label: Description, widget: text }
