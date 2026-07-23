@@ -45,7 +45,10 @@ export function projectSchema({ image }: { image: ImageFn }) {
       .array(
         z.object({
           src: image(),
-          alt: z.string().min(1),
+          /** Shown as a heading above the image; also the default alt text. */
+          title: z.string().min(1),
+          /** Optional alt-text override; falls back to title when absent. */
+          alt: z.string().min(1).optional(),
           caption: z.string().default(''),
         }),
       )

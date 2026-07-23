@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 
 interface Props {
-  items: { src: ImageMetadata; alt: string; caption: string }[];
+  items: { src: ImageMetadata; title: string; alt?: string; caption: string }[];
 }
 
 const { items } = Astro.props;
@@ -13,7 +13,8 @@ const { items } = Astro.props;
     {items.map((item) => (
       <li>
         <figure>
-          <Image src={item.src} alt={item.alt} widths={[400, 800, 1200]} loading="lazy" />
+          <h3 class="gallery__title">{item.title}</h3>
+          <Image src={item.src} alt={item.alt ?? item.title} widths={[400, 800, 1200]} loading="lazy" />
           {item.caption && <figcaption class="annotation">{item.caption}</figcaption>}
         </figure>
       </li>
@@ -33,6 +34,13 @@ const { items } = Astro.props;
 
   figure {
     margin: 0;
+  }
+
+  .gallery__title {
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--color-text);
   }
 
   figure img {
